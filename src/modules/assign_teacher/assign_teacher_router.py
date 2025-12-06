@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from pymongo.database import Database
 
-from src.lib.database import mongo_connection
+from ...lib.database import mongo_connection
 from .assign_teacher_controller import AssignTeacherController
 from .assign_teacher_schema import AssignTeacherCourseRequest, TeacherCourseResponse
 

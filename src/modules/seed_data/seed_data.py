@@ -12,7 +12,7 @@ from ..teacher.teacher_model import Teacher
 class SeedData:
     
     def __init__(self):
-        from src.lib.database import mongo_connection
+        from ...lib.database import mongo_connection
         from bson import ObjectId
         db = mongo_connection.db
 

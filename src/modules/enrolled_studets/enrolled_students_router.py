@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from typing import List
 from pymongo.database import Database
 
-from src.lib.database import mongo_connection
+from ...lib.database import mongo_connection
 from .enrolled_students_controller import EnrolledStudentsController
 from .enrolled_students_schema import (
     EnrollStudentCourseRequest,

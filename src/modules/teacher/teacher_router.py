@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query
 from typing import List
 from pymongo.database import Database
 
-from src.lib.database import mongo_connection
+from ...lib.database import mongo_connection
 from .teacher_controller import TeacherController
 from .teacher_schema import CreateTeacherRequest, UpdateTeacherRequest, TeacherResponse
 
