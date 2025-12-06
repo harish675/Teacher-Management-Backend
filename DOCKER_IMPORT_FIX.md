@@ -12,13 +12,42 @@ This occurred because the codebase had **inconsistent import patterns**. Some fi
 
 ## Root Cause
 
-The issue stems from how Python resolves module imports in different contexts:
+The issue had **two problems**:
 
-- **Local Development**: When running `fastapi dev main.py`, the `main.py` adds the project root to `sys.path`, allowing absolute imports like `from src.lib.database` to work.
+1. **Missing `__init__.py` file**: The `src/lib` directory was missing an `__init__.py` file, which prevented Python from recognizing it as a package.
 
-- **Docker Container**: When running `uvicorn src.app:app` directly, Python doesn't have the project root in `sys.path` the same way, so absolute imports starting with `src.` fail.
+2. **Gitignore blocking src/lib**: The `.gitignore` file had `lib/` which was blocking the entire `src/lib/` directory from being tracked by Git.
+
+3. **Inconsistent imports**: Some files used absolute imports (`from src.lib.database`) while Docker expected relative imports.
+
+### Why This Happened
+
+- **Local Development**: When running `fastapi dev main.py`, the `main.py` adds the project root to `sys.path`, allowing absolute imports like `from src.lib.database` to work even without `__init__.py`.
+
+- **Docker Container**: When running `uvicorn src.app:app` directly, Python requires proper package structure with `__init__.py` files for imports to work.
 
 ## Solution
+
+### 1. Fixed `.gitignore` to Allow `src/lib/`
+
+Updated `.gitignore` to exclude `src/lib/` from being ignored:
+
+```gitignore
+lib/
+lib64/
+# But don't ignore src/lib (our source code)
+!src/lib/
+```
+
+### 2. Created Missing `__init__.py` File
+
+Created `src/lib/__init__.py` to make it a proper Python package:
+
+```python
+# This file makes the lib directory a Python package
+```
+
+### 3. Changed Absolute Imports to Relative Imports
 
 Changed all absolute imports to **relative imports** in the following files:
 
